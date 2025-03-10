@@ -1,11 +1,8 @@
 import logging
-
 from sklearn.preprocessing import StandardScaler
-
 from src.load_data import load_data
 from src.preprocessing import preprocessing_data
 from src.model_training import model_training
-import mlflow
 
 # Nastavenie logovania
 logging.basicConfig(
@@ -13,6 +10,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
+
 
 def main():
     path = './data/raw/airbnb-raw.csv'
@@ -39,32 +37,15 @@ def main():
         return
 
     try:
-        current_run_id = mlflow.active_run().info.run_id
-        logging.info(f"Aktuálny run_id: {current_run_id}")
-    except Exception as e:
-        logging.error(f"Chyba pri získavaní run_id: {e}")
-        return
-
-    model_uri = f"runs:/{current_run_id}/gradient_boosting_model"
-    logging.info(f"Model URI: {model_uri}")
-
-    try:
-        model_loaded = mlflow.sklearn.load_model(model_uri)
-        logging.info("Model bol úspešne načítaný z MLflow.")
-    except Exception as e:
-        logging.error(f"Chyba pri načítaní modelu z MLflow: {e}")
-        return
-
-    try:
         X_test = df.drop(columns=['price', 'address'])
         X_test_scaled = StandardScaler().fit_transform(X_test)
-        y_pred = model_loaded.predict(X_test_scaled)
+        y_pred = model.predict(X_test_scaled)  # Priamo použitie trénovaného modelu
         logging.info(f"Predikcie: {y_pred}")
     except Exception as e:
-        logging.error(f"Chyba pri predikcii s načítaným modelom: {e}")
+        logging.error(f"Chyba pri predikcii s modelom: {e}")
         return
 
-    print("Model bol úspešne natrénovaný a uložený do MLflow. Predikcie boli vykonané.")
+    print("Model bol úspešne natrénovaný a predikcie boli vykonané.")
 
     return model
 
