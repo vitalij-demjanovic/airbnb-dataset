@@ -36,15 +36,6 @@ def main():
         logging.error(f"Chyba pri trénovaní modelu: {e}")
         return
 
-    try:
-        X_test = df.drop(columns=['price', 'address'])
-        X_test_scaled = StandardScaler().fit_transform(X_test)
-        y_pred = model.predict(X_test_scaled)  # Priamo použitie trénovaného modelu
-        logging.info(f"Predikcie: {y_pred}")
-    except Exception as e:
-        logging.error(f"Chyba pri predikcii s modelom: {e}")
-        return
-
     print("Model bol úspešne natrénovaný a predikcie boli vykonané.")
 
     return model
