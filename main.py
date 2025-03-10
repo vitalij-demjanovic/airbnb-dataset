@@ -1,10 +1,8 @@
 import logging
-from sklearn.preprocessing import StandardScaler
 from src.load_data import load_data
 from src.preprocessing import preprocessing_data
 from src.model_training import model_training
 
-# Nastavenie logovania
 logging.basicConfig(
     filename='ml_project.log',
     level=logging.INFO,
